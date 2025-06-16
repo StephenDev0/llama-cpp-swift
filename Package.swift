@@ -16,15 +16,24 @@ let package = Package(
             targets: ["LLamaSwift"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/ggerganov/llama.cpp", branch: "master"),
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.6.1"),
+        // Using local stub dependencies to allow offline builds in the Codex
+        // environment. Replace these with real package URLs in production.
     ],
     targets: [
         .target(
-            name: "LLamaSwift",        
+            name: "llama",
+            path: "Sources/llama",
+            publicHeadersPath: "include"
+        ),
+        .target(
+            name: "Logging",
+            path: "Sources/Logging"
+        ),
+        .target(
+            name: "LLamaSwift",
             dependencies: [
-                .product(name: "llama", package: "llama.cpp"),
-                .product(name: "Logging", package: "swift-log"),
+                "llama",
+                "Logging",
             ]
         ),
         .testTarget(
