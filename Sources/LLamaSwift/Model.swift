@@ -4,8 +4,8 @@ import llama
 
 public final class Model {
   private let logger = Logger.llama
-  let model: OpaquePointer
-  let context: OpaquePointer
+  let model: UnsafeMutablePointer<llama_model>
+  let context: UnsafeMutablePointer<llama_context>
 
   public init(modelPath: String, contextSize: UInt32 = 2048) throws {
     llama_backend_init()
@@ -27,7 +27,7 @@ public final class Model {
     logger.debug("Using \(nThreads) threads")
 
     var ctxParams = llama_context_default_params()
-    ctxParams.n_ctx = contextSize
+    ctxParams.n_ctx = Int32(contextSize)
     ctxParams.n_threads = Int32(nThreads)
     ctxParams.n_threads_batch = Int32(nThreads)
 
